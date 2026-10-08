@@ -34,6 +34,7 @@ Navigation and the downloadable CV work without JavaScript.
 
 Repository: [WashingApples/HenryKlattMath](https://github.com/WashingApples/HenryKlattMath).
 Website: [Henry Klatt](https://washingapples.github.io/HenryKlattMath/).
+ORCID: [0009-0004-3329-1657](https://orcid.org/0009-0004-3329-1657).
 
 Publish only this `website` directory to the GitHub repository. Do not
 upload the surrounding job-application workspace. Choose **GitHub Actions** in

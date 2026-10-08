@@ -196,6 +196,7 @@ export function AcademicSite({ page = "home" }: { page?: SitePage }) {
             </div>
             <p>Ph.D. student in mathematics</p>
             <p>Department of Mathematics, The George Washington University</p>
+            <p>ORCID: <a href="https://orcid.org/0009-0004-3329-1657" rel="me">0009-0004-3329-1657</a></p>
           </div>
           <div className="theme-controls"><button className="theme-toggle" type="button" aria-pressed="false" hidden>Dark mode</button></div>
         </div>
