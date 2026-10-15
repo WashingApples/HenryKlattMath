@@ -15,7 +15,8 @@
     "test": "npm run build:pages && node --test tests/*.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
-    "build:pages": "node scripts/build-pages.mjs"
+    "build:pages": "node scripts/build-pages.mjs",
+    "analytics:preview": "node analytics/preview.mjs"
   },
   "dependencies": {
     "chess.js": "1.4.0",

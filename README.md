@@ -83,6 +83,11 @@ the public `token` value from the site's installation snippet. This is the websi
 measurement identifier, not an account API credential. Analytics begins after the
 configured site is published. View the statistics in Cloudflare Web Analytics.
 
+A separate city/region tracker and private dashboard were deployed on October 15,
+2026. `public/city-analytics.js` sends approved page paths to the Cloudflare Worker.
+See [the dated setup notes](analytics/README_2026-10-15.md) for its dashboard URL,
+data model, local demo, free-tier limits, and maintenance instructions.
+
 ## Email image
 
 The email appears as a CAPTCHA-style image. The initial HTML has no plain-text

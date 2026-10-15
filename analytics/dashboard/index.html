@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visitor locations | Henry Klatt</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/dashboard.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><div><p class="eyebrow">Henry Klatt · Website analytics</p><h1>Visitor locations</h1></div><span class="private">Private dashboard</span></header>
+    <p class="intro">See where your website is being read, one page view at a time.</p>
+    <section id="login" class="panel login" aria-labelledby="login-title">
+      <h2 id="login-title">Open your statistics</h2>
+      <p>Enter your dashboard access key. It stays in memory and is cleared when you sign out or reload.</p>
+      <form id="login-form"><label for="key">Access key</label><div class="key-row"><input id="key" type="password" autocomplete="off" required><button type="submit">Open dashboard</button></div></form>
+    </section>
+    <p id="status" role="status" aria-live="polite"></p>
+    <div id="report" hidden>
+      <p id="preview" class="preview" hidden>Local demonstration · These are sample counts, not live visitors.</p>
+      <div class="toolbar"><div><label for="days">Date range</label><select id="days"><option value="1">Today</option><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="180">Last 180 days</option></select><p id="dates" class="muted"></p></div><div class="actions"><button id="refresh" type="button">Refresh</button><button id="logout" type="button" class="secondary">Sign out</button></div></div>
+      <div class="metrics"><section class="panel"><h2>Page views</h2><p id="views" class="number">0</p></section><section class="panel"><h2>Countries</h2><p id="countries" class="number">0</p></section><section class="panel"><h2>Cities identified</h2><p id="cities" class="number">0</p></section></div>
+      <section class="panel"><h2>Daily page views</h2><div id="chart" class="chart" role="img" aria-label="Daily page views"></div><p class="muted">Dates use UTC. Counts include repeat page views, not unique people.</p></section>
+      <section class="panel"><div class="section-heading"><h2>Locations</h2><label class="filter-label" for="filter">Filter locations <input id="filter" type="search" placeholder="City, region, or country"></label></div><div class="table-wrap"><table><caption class="muted">Top 100 locations by page views. Location estimates can be affected by VPNs and mobile networks.</caption><thead><tr><th scope="col">City</th><th scope="col">Region / state</th><th scope="col">Country</th><th scope="col" class="count">Page views</th></tr></thead><tbody id="locations"></tbody></table></div><p id="empty" class="muted" hidden>No page views match this selection.</p></section>
+      <section class="panel"><h2>Pages read</h2><div class="table-wrap"><table><thead><tr><th scope="col">Page</th><th scope="col" class="count">Page views</th></tr></thead><tbody id="pages"></tbody></table></div></section>
+      <footer>Daily totals retained for 180 days. No visitor identifiers, raw IP addresses, precise coordinates, or query strings are stored in this tracker’s database.</footer>
+    </div>
+  </main>
+</body>
+</html>
