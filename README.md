@@ -2,11 +2,13 @@
 
 A professional academic site drafted from `cv/henry_klatt_cv.tex`, with research,
 preprints and work in preparation, teaching, selected talks, service,
-and contact details. The CV content snapshot is from October 4, 2026.
+and contact details. The downloadable CV was synchronized with the general CV
+on October 9, 2026; the other site content was drafted on October 4, 2026.
 
 The site has six pages: Home, Research (including papers and talks), Teaching,
 Resources for students, Service, and CV. The home page contains the requested welcome, the Lichess daily
-puzzle, and contact details. The CV page contains the PDF download.
+puzzle, and contact details. The CV page displays the PDF in the browser’s
+embedded viewer, with an alternate link to open it in a separate tab.
 
 ## Preview and build
 
@@ -31,6 +33,10 @@ using a local HTTP server. The development preview includes every page.
 Navigation and the downloadable CV work without JavaScript.
 
 ## Publishing on GitHub
+
+Make and verify changes in this offline copy first. Publish only when Henry
+explicitly asks. Pushing to `main` triggers publication automatically, so keep
+offline changes local until that instruction.
 
 Repository: [WashingApples/HenryKlattMath](https://github.com/WashingApples/HenryKlattMath).
 Website: [Henry Klatt](https://washingapples.github.io/HenryKlattMath/).
@@ -60,8 +66,22 @@ The source configuration follows [GitHub's Pages workflow documentation](https:/
 - `public/og-blue.png`: matching social-preview card.
 - `app/research/page.tsx`, `app/teaching/page.tsx`, `app/resources/page.tsx`, `app/service/page.tsx`, `app/cv/page.tsx`: page routes.
 
-Paper status is deliberate: one preprint and three works in preparation. The
+Paper status on the Research page is deliberate: one preprint and three works in preparation. The
 doctorate is shown as expected spring 2027, and the Oaxaca workshop as scheduled.
+
+## Visitor analytics
+
+Cloudflare Web Analytics is wired into all six pages through `public/analytics.js`.
+The public site token was configured on October 15, 2026. The loader runs only
+on HTTPS at `washingapples.github.io`; local
+previews stay untracked. Update the hostname if the site moves to a custom domain.
+Set `token` to an empty string in that file to disable analytics, then rebuild.
+
+In the [Cloudflare dashboard](https://dash.cloudflare.com/), open Web Analytics,
+add the hostname `washingapples.github.io` (without the repository path), and copy
+the public `token` value from the site's installation snippet. This is the website
+measurement identifier, not an account API credential. Analytics begins after the
+configured site is published. View the statistics in Cloudflare Web Analytics.
 
 ## Email image
 

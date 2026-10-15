@@ -8,7 +8,7 @@ const pages = await Promise.all(paths.map(async (path) => ({ path, url: new URL(
 
 test("every exported page links to existing pages, assets, and fragments", async () => {
   for (const page of pages) {
-    for (const [, rawTarget] of page.html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
+    for (const [, rawTarget] of page.html.matchAll(/\b(?:href|src|data)="([^"]+)"/g)) {
       if (/^[a-z]+:/i.test(rawTarget)) continue;
       assert.ok(!rawTarget.startsWith("/"), `Root-relative link breaks repository hosting: ${rawTarget}`);
       const target = new URL(rawTarget.replaceAll("&amp;", "&"), page.url);
@@ -37,7 +37,10 @@ test("the home page includes the welcome and daily puzzle; academic content has 
   assert.match(pages[2].html, /Instructor of Record/);
   assert.match(pages[3].html, /Lead organizer/);
   for (const page of pages) assert.doesNotMatch(page.html, /id="education-title"|Magna cum laude/);
-  assert.match(pages[4].html, /href="\.\.\/henry-klatt-cv\.pdf" download="Henry-Klatt-CV\.pdf"/);
+  assert.match(pages[4].html, /<object[^>]+data="\.\.\/henry-klatt-cv\.pdf"[^>]+type="application\/pdf"/);
+  assert.match(pages[4].html, /aria-label="Henry Klatt’s curriculum vitae"/);
+  assert.match(pages[4].html, /href="\.\.\/henry-klatt-cv\.pdf"/);
+  assert.doesNotMatch(pages[4].html, /\bdownload=/);
   for (const page of pages) assert.equal((page.html.match(/aria-current="page"/g) || []).length, 1);
 });
 
@@ -58,7 +61,7 @@ test("the playable board ships every piece and its locally served rules library"
   }
 });
 
-test("CV downloads contain the actual PDF and starter metadata is absent", async () => {
+test("the CV viewer serves the actual PDF and starter metadata is absent", async () => {
   const pdf = await readFile(new URL("henry-klatt-cv.pdf", output));
   assert.equal(pdf.subarray(0, 5).toString(), "%PDF-");
   for (const page of pages) {

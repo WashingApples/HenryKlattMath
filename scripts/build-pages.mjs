@@ -61,7 +61,7 @@ try {
   <link rel="icon" href="${rootPath}favicon.png" type="image/png">
   <script src="${rootPath}theme-init.js"></script>
   <link rel="stylesheet" href="${rootPath}styles.css">
-</head><body>${body}<script src="${rootPath}theme.js" defer></script><script src="${rootPath}puzzle.js" type="module"></script></body></html>`;
+</head><body>${body}<script src="${rootPath}theme.js" defer></script><script src="${rootPath}puzzle.js" type="module"></script><script src="${rootPath}analytics.js" defer></script></body></html>`;
     const directory = resolve(out, info.path);
     await mkdir(directory, { recursive: true });
     await writeFile(resolve(directory, "index.html"), html);

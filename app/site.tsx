@@ -6,7 +6,7 @@ export const pageInfo = {
   teaching: { path: "teaching/", label: "Teaching", title: "Teaching | Henry Klatt", description: "Henry Klatt’s mathematics teaching experience at the George Washington University." },
   resources: { path: "resources/", label: "Resources for students", title: "Resources for students | Henry Klatt", description: "Mathematics resources for students, including 3Blue1Brown’s Essence of Calculus playlist and Henry Klatt’s Desmos graphs for Calculus I, II, and III." },
   service: { path: "service/", label: "Service", title: "Service | Henry Klatt", description: "Henry Klatt’s academic service, conference organization, and seminar organization." },
-  cv: { path: "cv/", label: "CV", title: "CV | Henry Klatt", description: "Henry Klatt’s downloadable curriculum vitae." },
+  cv: { path: "cv/", label: "CV", title: "CV | Henry Klatt", description: "Read Henry Klatt’s curriculum vitae." },
 };
 
 const papers = [
@@ -170,7 +170,10 @@ function HomePage({ rootPath }: { rootPath: string }) {
 function CVPage({ rootPath }: { rootPath: string }) {
   return <section aria-labelledby="cv-title">
     <h2 id="cv-title">CV</h2>
-    <p><a href={`${rootPath}henry-klatt-cv.pdf`} download="Henry-Klatt-CV.pdf">Download CV (PDF)</a></p>
+    <object className="cv-viewer" data={`${rootPath}henry-klatt-cv.pdf`} type="application/pdf" aria-label="Henry Klatt’s curriculum vitae" title="Henry Klatt’s curriculum vitae">
+      <p>Your browser cannot display this PDF here. <a href={`${rootPath}henry-klatt-cv.pdf`}>Open the CV (PDF)</a>.</p>
+    </object>
+      <p className="cv-open-link entry-note"><a href={`${rootPath}henry-klatt-cv.pdf`} target="_blank" rel="noopener noreferrer">Open the PDF in a separate tab</a></p>
   </section>;
 }
 

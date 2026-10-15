@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head><script src="/theme-init.js" /></head>
-      <body>{children}<script src="/theme.js" defer /><script src="/puzzle.js" type="module" /></body>
+      <body>{children}<script src="/theme.js" defer /><script src="/puzzle.js" type="module" /><script src="/analytics.js" defer /></body>
     </html>
   );
 }
