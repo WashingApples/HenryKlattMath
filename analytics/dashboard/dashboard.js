@@ -4,7 +4,9 @@
   const names = new Intl.DisplayNames(["en"], {type: "region"});
   const countryName = code => { try { return code ? names.of(code) : "Unknown"; } catch { return code || "Unknown"; } };
   let accessKey = "", locations = [], generation = 0;
-  function rows(target, items) {
+  let historyCursor = null, historyCount = 0, historyGeneration = 0, historySelection = null;
+  const timeFormat = new Intl.DateTimeFormat("en-US", {timeZone: "UTC", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"});
+  function rows(target, items, append = false) {
     const fragment = document.createDocumentFragment();
     for (const values of items) {
       const row = document.createElement("tr");
@@ -16,7 +18,7 @@
       });
       fragment.append(row);
     }
-    $(target).replaceChildren(fragment);
+    if (append) $(target).append(fragment); else $(target).replaceChildren(fragment);
   }
   function filterLocations() {
     const filter = $("filter").value.trim().toLowerCase();
@@ -36,8 +38,46 @@
     $("chart").replaceChildren(...bars);
     $("chart").setAttribute("aria-label", `${format.format(data.summary.views)} page views from ${data.start} through ${data.end}, UTC. Daily counts: ${data.daily.map(row => `${row.day}: ${row.views}`).join("; ") || "none"}.`);
   }
+  async function loadHistory(more = false) {
+    const current = ++historyGeneration, dashboardGeneration = generation;
+    if (!more) {
+      historyCursor = null; historyCount = 0; $("history").replaceChildren();
+      historySelection = {days: $("days").value, mode: $("history-mode").value, search: $("history-search").value.trim()};
+    }
+    $("history-status").textContent = "Loading visit history…";
+    $("history-search-button").disabled = true; $("history-more").disabled = true;
+    $("history-more").hidden = true;
+    const mode = historySelection.mode;
+    $("history-date-heading").textContent = mode === "visits" ? "Date / time (UTC)" : "Date (UTC)";
+    const params = new URLSearchParams(historySelection);
+    if (more && historyCursor) params.set("cursor", historyCursor);
+    try {
+      const response = await fetch(`/api/history?${params}`, {headers: {Authorization: `Bearer ${accessKey}`}, cache: "no-store", credentials: "omit"});
+      if (current !== historyGeneration || dashboardGeneration !== generation) return;
+      const data = await response.json();
+      if (current !== historyGeneration || dashboardGeneration !== generation) return;
+      if (!response.ok) throw new Error(data.error || "Unable to load visit history.");
+      rows("history", data.rows.map(row => [row.occurred_at ? timeFormat.format(new Date(row.occurred_at)) : row.day, row.city || "Unknown", row.region || "Unknown", countryName(row.country), row.views]), more);
+      historyCount += data.rows.length; historyCursor = data.next_cursor;
+      $("history-more").hidden = !historyCursor;
+      $("history-status").textContent = historyCount
+        ? `${format.format(historyCount)} rows shown.${historyCursor ? " Load more for earlier activity." : " All matching activity is shown."}`
+        : mode === "visits" ? "No individual page views match this selection. Earlier activity is available in Daily location history; individual times are recorded from the history update onward." : "No recorded dates match this selection.";
+    } catch (error) {
+      if (current === historyGeneration && dashboardGeneration === generation) {
+        $("history-status").textContent = error.message || "Unable to connect to visit history.";
+        $("history-more").hidden = !historyCursor;
+      }
+    } finally {
+      if (current === historyGeneration && dashboardGeneration === generation) {
+        $("history-search-button").disabled = false; $("history-more").disabled = false;
+      }
+    }
+  }
   async function load() {
     const current = ++generation;
+    historyGeneration++; historyCursor = null; historyCount = 0;
+    $("history").replaceChildren(); $("history-more").hidden = true; $("history-status").textContent = "";
     $("status").textContent = "Loading statistics…"; $("refresh").disabled = true;
     try {
       const response = await fetch(`/api/stats?days=${$("days").value}`, {headers: {Authorization: `Bearer ${accessKey}`}, cache: "no-store", credentials: "omit"});
@@ -53,6 +93,7 @@
       locations = data.locations; filterLocations(); drawChart(data);
       rows("pages", data.pages.map(row => [row.path.replace("/HenryKlattMath/", "/"), row.views]));
       $("status").textContent = data.summary.views ? "" : "No page views yet. Statistics will appear after tracking is published and visitors open the site.";
+      loadHistory();
     } catch (error) { if (current === generation) $("status").textContent = error.message || "Unable to connect to the dashboard."; }
     finally { if (current === generation) $("refresh").disabled = false; }
   }
@@ -60,10 +101,15 @@
   $("days").addEventListener("change", load);
   $("refresh").addEventListener("click", load);
   $("filter").addEventListener("input", filterLocations);
+  $("history-form").addEventListener("submit", event => { event.preventDefault(); loadHistory(); });
+  $("history-mode").addEventListener("change", () => loadHistory());
+  $("history-more").addEventListener("click", () => loadHistory(true));
   $("logout").addEventListener("click", () => {
-    generation++; accessKey = ""; locations = [];
+    generation++; historyGeneration++; accessKey = ""; locations = []; historyCursor = null; historyCount = 0; historySelection = null;
     $("report").hidden = true; $("login").hidden = false; $("status").textContent = "Signed out.";
-    ["locations", "pages", "chart"].forEach(id => $(id).replaceChildren());
+    ["locations", "pages", "chart", "history"].forEach(id => $(id).replaceChildren());
+    $("history-search").value = ""; $("history-status").textContent = ""; $("history-more").hidden = true;
+    $("history-search-button").disabled = false;
     ["views", "countries", "cities"].forEach(id => $(id).textContent = "0");
     $("refresh").disabled = false; $("key").focus();
   });

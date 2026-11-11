@@ -7,8 +7,13 @@ import { openLocalDB } from "./local-db.mjs";
 const {DB, sqlite} = openLocalDB();
 const key = "local-preview-only-not-a-production-key";
 const insert = sqlite.prepare("INSERT INTO location_counts VALUES (?, ?, ?, ?, ?, ?)");
-for (const [country, region, city, count] of [["US", "District of Columbia", "Washington", 24], ["US", "Iowa", "Des Moines", 12], ["US", "Minnesota", "Minneapolis", 9], ["BR", "São Paulo", "São Paulo", 7], ["GB", "England", "London", 5], ["", "", "", 3]]) {
+for (const [country, region, city, count] of [["US", "District of Columbia", "Washington", 24], ["US", "Iowa", "Des Moines", 12], ["US", "Minnesota", "Minneapolis", 9], ["BR", "São Paulo", "São Paulo", 7], ["GB", "England", "London", 5], ["CH", "Zürich", "Zürich", 4], ["", "", "", 3]]) {
   for (let ago = 0; ago < 7; ago++) insert.run(new Date(Date.now() - ago * 86400000).toISOString().slice(0, 10), ago % 2 ? "/HenryKlattMath/research/" : "/HenryKlattMath/", country, region, city, Math.max(1, count - ago * 2));
+  for (let ago = 0; ago < 2; ago++) {
+    const day = new Date(Date.now() - ago * 86400000).toISOString().slice(0, 10);
+    sqlite.prepare("INSERT INTO visit_events (occurred_at, path, country, region, city) VALUES (?, ?, ?, ?, ?)")
+      .run(`${day}T10:32:04.000Z`, ago % 2 ? "/HenryKlattMath/research/" : "/HenryKlattMath/", country, region, city);
+  }
 }
 const env = {
   DB, ADMIN_TOKEN: key, LOCAL_PREVIEW: "1",

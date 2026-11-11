@@ -3,7 +3,7 @@
 A professional academic site drafted from `cv/henry_klatt_cv.tex`, with research,
 preprints and work in preparation, teaching, selected talks, service,
 and contact details. The downloadable CV was synchronized with the general CV
-on October 9, 2026; the other site content was drafted on October 4, 2026.
+on November 11, 2026; the other site content was drafted on October 4, 2026.
 
 The site has six pages: Home, Research (including papers and talks), Teaching,
 Resources for students, Service, and CV. The home page contains the requested welcome, the Lichess daily
@@ -87,6 +87,8 @@ A separate city/region tracker and private dashboard were deployed on October 15
 2026. `public/city-analytics.js` sends approved page paths to the Cloudflare Worker.
 See [the dated setup notes](analytics/README_2026-10-15.md) for its dashboard URL,
 data model, local demo, free-tier limits, and maintenance instructions.
+The [November 11 history update](analytics/README_2026-11-11.md) adds dated
+location totals and individual page-view times while preserving earlier data.
 
 ## Email image
 

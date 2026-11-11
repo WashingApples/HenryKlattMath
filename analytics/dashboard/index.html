@@ -23,8 +23,19 @@
       <div class="metrics"><section class="panel"><h2>Page views</h2><p id="views" class="number">0</p></section><section class="panel"><h2>Countries</h2><p id="countries" class="number">0</p></section><section class="panel"><h2>Cities identified</h2><p id="cities" class="number">0</p></section></div>
       <section class="panel"><h2>Daily page views</h2><div id="chart" class="chart" role="img" aria-label="Daily page views"></div><p class="muted">Dates use UTC. Counts include repeat page views, not unique people.</p></section>
       <section class="panel"><div class="section-heading"><h2>Locations</h2><label class="filter-label" for="filter">Filter locations <input id="filter" type="search" placeholder="City, region, or country"></label></div><div class="table-wrap"><table><caption class="muted">Top 100 locations by page views. Location estimates can be affected by VPNs and mobile networks.</caption><thead><tr><th scope="col">City</th><th scope="col">Region / state</th><th scope="col">Country</th><th scope="col" class="count">Page views</th></tr></thead><tbody id="locations"></tbody></table></div><p id="empty" class="muted" hidden>No page views match this selection.</p></section>
+      <section class="panel" aria-labelledby="history-title">
+        <h2 id="history-title">Visit history</h2>
+        <form id="history-form" class="history-controls">
+          <label for="history-mode">Show<select id="history-mode"><option value="daily">Daily location history</option><option value="visits">Individual page views</option></select></label>
+          <label for="history-search">Search city or region<input id="history-search" type="search" maxlength="80" placeholder="For example, Zürich"></label>
+          <button id="history-search-button" type="submit">Find visits</button>
+        </form>
+        <p id="history-note" class="muted">Daily totals include older activity. Individual page views have dates and times from the history update onward. These are page views, not identified people.</p>
+        <div class="table-wrap"><table><caption class="muted">Newest activity first. All dates and times use UTC; locations are estimates.</caption><thead><tr><th id="history-date-heading" scope="col">Date (UTC)</th><th scope="col">City</th><th scope="col">Region / state</th><th scope="col">Country</th><th scope="col" class="count">Page views</th></tr></thead><tbody id="history"></tbody></table></div>
+        <div class="history-bottom"><p id="history-status" class="muted" role="status" aria-live="polite"></p><button id="history-more" type="button" class="secondary" hidden>Load more</button></div>
+      </section>
       <section class="panel"><h2>Pages read</h2><div class="table-wrap"><table><thead><tr><th scope="col">Page</th><th scope="col" class="count">Page views</th></tr></thead><tbody id="pages"></tbody></table></div></section>
-      <footer>Daily totals retained for 180 days. No visitor identifiers, raw IP addresses, precise coordinates, or query strings are stored in this tracker’s database.</footer>
+      <footer>Daily totals and individual page views are retained for 180 days. No visitor identifiers, raw IP addresses, precise coordinates, or query strings are stored in this tracker’s database. Separate page views cannot establish whether the same person returned.</footer>
     </div>
   </main>
 </body>

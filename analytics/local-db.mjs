@@ -1,12 +1,19 @@
 // Local preview/test adapter. Production uses the Cloudflare D1 binding.
 import { DatabaseSync } from "node:sqlite";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 
 export function openLocalDB(filename = ":memory:") {
   const sqlite = new DatabaseSync(filename);
-  if (sqlite.prepare("PRAGMA user_version").get().user_version === 0) {
-    sqlite.exec(readFileSync(new URL("./migrations/0001_location_counts.sql", import.meta.url), "utf8"));
-    sqlite.exec("PRAGMA user_version = 1");
+  const version = sqlite.prepare("PRAGMA user_version").get().user_version;
+  for (const file of readdirSync(new URL("./migrations/", import.meta.url)).filter(file => /^\d+_.*\.sql$/.test(file)).sort()) {
+    const next = Number(file.split("_")[0]);
+    if (next <= version) continue;
+    sqlite.exec("BEGIN");
+    try {
+      sqlite.exec(readFileSync(new URL(`./migrations/${file}`, import.meta.url), "utf8"));
+      sqlite.exec(`PRAGMA user_version = ${next}`);
+      sqlite.exec("COMMIT");
+    } catch (error) { sqlite.exec("ROLLBACK"); sqlite.close(); throw error; }
   }
   const DB = {
     prepare(sql) {

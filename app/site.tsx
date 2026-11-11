@@ -170,6 +170,7 @@ function HomePage({ rootPath }: { rootPath: string }) {
 function CVPage({ rootPath }: { rootPath: string }) {
   return <section aria-labelledby="cv-title">
     <h2 id="cv-title">CV</h2>
+    <p className="entry-note">Updated November 11, 2026.</p>
     <object className="cv-viewer" data={`${rootPath}henry-klatt-cv.pdf`} type="application/pdf" aria-label="Henry Klatt’s curriculum vitae" title="Henry Klatt’s curriculum vitae">
       <p>Your browser cannot display this PDF here. <a href={`${rootPath}henry-klatt-cv.pdf`}>Open the CV (PDF)</a>.</p>
     </object>
