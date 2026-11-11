@@ -1,5 +1,8 @@
 export type SitePage = "home" | "research" | "teaching" | "resources" | "service" | "cv";
 
+// Revision follows the PDF's SHA-256 so each replacement bypasses stale caches.
+const cvFile = "henry-klatt-cv.pdf?v=d41dcfdd84ce";
+
 export const pageInfo = {
   home: { path: "", label: "Home", title: "Henry Klatt | Mathematical Logic & Computability", description: "Henry Klatt is a mathematics Ph.D. student at the George Washington University. Research, teaching, service, and contact information." },
   research: { path: "research/", label: "Research", title: "Research | Henry Klatt", description: "Henry Klatt’s research in mathematical logic and computability theory, preprints, work in preparation, and selected talks." },
@@ -44,7 +47,7 @@ function ResearchPage({ rootPath }: { rootPath: string }) {
     <section aria-labelledby="talks-title">
       <h2 id="talks-title">Selected talks</h2>
       <div className="talk-list">{talks.map((talk) => <article className="dated-entry" key={`${talk.date}-${talk.title}`}><p className="entry-date">{talk.date}</p><div><h3>{talk.title}</h3><p className="entry-note">{talk.venue}</p></div></article>)}</div>
-      <p><a href={`${rootPath}henry-klatt-cv.pdf`}>Complete list of talks in my CV</a></p>
+      <p><a href={`${rootPath}${cvFile}`}>Complete list of talks in my CV</a></p>
     </section>
   </>;
 }
@@ -171,10 +174,10 @@ function CVPage({ rootPath }: { rootPath: string }) {
   return <section aria-labelledby="cv-title">
     <h2 id="cv-title">CV</h2>
     <p className="entry-note">Updated November 11, 2026.</p>
-    <object className="cv-viewer" data={`${rootPath}henry-klatt-cv.pdf`} type="application/pdf" aria-label="Henry Klatt’s curriculum vitae" title="Henry Klatt’s curriculum vitae">
-      <p>Your browser cannot display this PDF here. <a href={`${rootPath}henry-klatt-cv.pdf`}>Open the CV (PDF)</a>.</p>
+    <object className="cv-viewer" data={`${rootPath}${cvFile}`} type="application/pdf" aria-label="Henry Klatt’s curriculum vitae" title="Henry Klatt’s curriculum vitae">
+      <p>Your browser cannot display this PDF here. <a href={`${rootPath}${cvFile}`}>Open the CV (PDF)</a>.</p>
     </object>
-      <p className="cv-open-link entry-note"><a href={`${rootPath}henry-klatt-cv.pdf`} target="_blank" rel="noopener noreferrer">Open the PDF in a separate tab</a></p>
+      <p className="cv-open-link entry-note"><a href={`${rootPath}${cvFile}`} target="_blank" rel="noopener noreferrer">Open the PDF in a separate tab</a></p>
   </section>;
 }
 

@@ -62,6 +62,8 @@ The source configuration follows [GitHub's Pages workflow documentation](https:/
 - `app/site.tsx`: biography, research, papers, talks, and teaching entries.
 - `app/globals.css`: colors, typography, spacing, and responsive layout.
 - `public/henry-klatt-cv.pdf`: downloadable CV; replace when the CV changes.
+  Update `cvFile` in `app/site.tsx` to the first 12 characters of the new PDF's
+  SHA-256 hash so embedded and download links bypass older cached versions.
 - `public/email-contact.png`: the exact CAPTCHA image supplied by the user.
 - `public/og-blue.png`: matching social-preview card.
 - `app/research/page.tsx`, `app/teaching/page.tsx`, `app/resources/page.tsx`, `app/service/page.tsx`, `app/cv/page.tsx`: page routes.

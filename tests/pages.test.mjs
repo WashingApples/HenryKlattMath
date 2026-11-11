@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import test from "node:test";
 
@@ -37,9 +38,9 @@ test("the home page includes the welcome and daily puzzle; academic content has 
   assert.match(pages[2].html, /Instructor of Record/);
   assert.match(pages[3].html, /Lead organizer/);
   for (const page of pages) assert.doesNotMatch(page.html, /id="education-title"|Magna cum laude/);
-  assert.match(pages[4].html, /<object[^>]+data="\.\.\/henry-klatt-cv\.pdf"[^>]+type="application\/pdf"/);
+  assert.match(pages[4].html, /<object[^>]+data="\.\.\/henry-klatt-cv\.pdf\?v=[a-f0-9]{12}"[^>]+type="application\/pdf"/);
   assert.match(pages[4].html, /aria-label="Henry Klatt’s curriculum vitae"/);
-  assert.match(pages[4].html, /href="\.\.\/henry-klatt-cv\.pdf"/);
+  assert.match(pages[4].html, /href="\.\.\/henry-klatt-cv\.pdf\?v=[a-f0-9]{12}"/);
   assert.doesNotMatch(pages[4].html, /\bdownload=/);
   for (const page of pages) assert.equal((page.html.match(/aria-current="page"/g) || []).length, 1);
 });
@@ -64,7 +65,11 @@ test("the playable board ships every piece and its locally served rules library"
 test("the CV viewer serves the actual PDF and starter metadata is absent", async () => {
   const pdf = await readFile(new URL("henry-klatt-cv.pdf", output));
   assert.equal(pdf.subarray(0, 5).toString(), "%PDF-");
+  const revision = createHash("sha256").update(pdf).digest("hex").slice(0, 12);
   for (const page of pages) {
+    for (const [, target] of page.html.matchAll(/(?:href|data)="([^"]*henry-klatt-cv\.pdf[^"]*)"/g)) {
+      assert.equal(new URL(target, page.url).searchParams.get("v"), revision, "CV links must bypass caches after the PDF changes");
+    }
     assert.match(page.html, /<html lang="en">/);
     assert.doesNotMatch(page.html, /codex-preview|Starter Project|react-loading-skeleton/);
   }
